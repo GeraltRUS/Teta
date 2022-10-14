@@ -6,7 +6,6 @@ import (
 	"os"
 	"regexp"
 	"sort"
-	"strings"
 )
 
 // Структура для сохранения результатов
@@ -33,14 +32,7 @@ func inc(num rune) {
 // Проверка условия задачи на ввод, только на символы алфавитов.
 
 func LetterOnly(s string) bool {
-	SymbLet := regexp.MustCompile("[a-zA-Zа-яА-Я]{1,}")
-	OrigStr := SymbLet.FindAllString(s, -1)
-	NewString := strings.Join(OrigStr, "")
-	if strings.Compare(s, NewString) == 0 {
-		return true
-	} else {
-		return false
-	}
+	return regexp.MustCompile(`^[A-Za-zА-Яа-я]*$`).MatchString(s)
 }
 
 var conc = []concurrences{}
@@ -49,11 +41,10 @@ func main() {
 	var str2 string
 
 	//Считываем строку целиком со всеми символами и проверяем на условие:
-	s, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	if err != nil {
-		fmt.Println("Каким-то образом приехала не строка")
-	}
-	str := strings.TrimSuffix(s, "\r\n")
+
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	str := scanner.Text()
 	if LetterOnly(str) == false {
 		fmt.Println("Не соответствует условию задачи, вводить нужно только кириллицу или латиницу без пробелов")
 	} else {
